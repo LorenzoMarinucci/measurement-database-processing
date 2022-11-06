@@ -47,13 +47,13 @@ def _plot_hourly_averages(df: DataFrame) -> None:
 
 def _plot_measurement(df: DataFrame, column: str) -> None:
     title = "{} variable evolution".format(column)
-    df[column].plot(title=title, ylabel=column)
+    df[column].plot(title=title, ylabel=column, style='.', linestyle='none', ms=3)
     plt.show()
 
 
 def _plot_aggregate(df: DataFrame, column: str, period: str) -> None:
     title = "{} variable {} mean evolution".format(column, period)
-    df[column].plot(title=title, ylabel=column, style='.-')
+    df[column].plot(title=title, ylabel=column, style='.', linestyle='none', ms=10)
     plt.show()
 
 
