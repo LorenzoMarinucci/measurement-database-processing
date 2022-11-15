@@ -3,8 +3,8 @@ from typing import Optional
 
 import pandas as pd
 
-from processing.constants.dataset import DatasetColumns, DefaultValues
-from processing.constants.files import FilesConstants
+from processing.constants.datasetConstants import DatasetColumns, DefaultValues
+from processing.constants.filesConstants import FilesConstants
 from processing.describe import describe_dataframe
 from processing.plots import plot_timeseries, plot_boxes, plot_correlations, plot_beyond_sdvs
 from processing.save import saveData

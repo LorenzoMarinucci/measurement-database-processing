@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 
-from processing.constants.dataset import DatasetColumns
+from processing.constants.datasetConstants import DatasetColumns
 
 
 def describe_dataframe(df: DataFrame) -> DataFrame:
