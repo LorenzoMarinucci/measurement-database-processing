@@ -3,19 +3,20 @@ import sys
 import tkinter as tk
 from tkinter.ttk import Combobox
 from tkcalendar import Calendar, DateEntry
+import re
 
 from params.params import ConsoleParams
-#from processing.dataframeprocessing import process_dataset
+from processing.dataframeprocessing import process_dataset
 
 def main() -> None:
     window = tk.Tk()
     gui = GUI(window)
     window.mainloop()
 
-    filename = _get_filename()
-    day_start, day_end = _get_day_start_and_end()
-    hour_start, hour_end = _get_hour_start_and_end()
-    sdv = _get_standard_deviation()
+    #filename = _get_filename()
+    #day_start, day_end = _get_day_start_and_end()
+    #hour_start, hour_end = _get_hour_start_and_end()
+    #sdv = _get_standard_deviation()
 
     #process_dataset(filename, hour_start, hour_end, day_start, day_end, sdv)
 
@@ -108,6 +109,7 @@ class GUI(object):
         entry4.place(x=150, y=190)
         entry5 = tk.Entry(width=8)
         entry5.place(x=150, y=220)
+        entry5.insert(0, 3)
 
         def activateCheck1():
             if v1.get() == 1:  # whenever checked
@@ -157,11 +159,25 @@ class GUI(object):
         entry5.config(state="disabled")
 
         def process():
-            if self.file != "":
-                return
-                #if
+            errorMessage = ""
+            datePattern = re.compile("^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$")
+            timePattern = re.compile("^(((([0-1][0-9])|(2[0-3])):?[0-5][0-9]:?[0-5][0-9]+$))")
+            if self.file == "":
+                errorMessage += "Debe elegir un archivo\n"
+            if v1.get() == 1 and (entry1.get() == "" or not datePattern.match(entry1.get())):
+                errorMessage += "Debe ingresar una fecha de inicio válida\n"
+            if v2.get() == 1 and (entry2.get() == "" or not datePattern.match(entry2.get())):
+                errorMessage += "Debe ingresar una fecha de fin válida\n"
+            if v3.get() == 1 and (entry3.get() == "" or not timePattern.match(entry3.get())):
+                errorMessage += "Debe ingresar una hora de inicio válida\n"
+            if v4.get() == 1 and (entry4.get() == "" or not timePattern.match(entry4.get())):
+                errorMessage += "Debe ingresar una hora de fin válida\n"
+            if v5.get() == 1 and entry5.get() == "":
+                errorMessage += "Debe ingresar un valor de desviación estandar válido"
+            if errorMessage == "":
+                process_dataset(self.file, entry3.get(), entry4.get(), entry1.get(), entry2.get(), entry5.get())
             else:
-                print("Debe elegir un archivo")
+                print(errorMessage)
 
         submit = tk.Button(text="Submit", command=process)
         submit.place(x=120, y=260)
