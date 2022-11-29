@@ -1,11 +1,7 @@
 import os
-import sys
 import tkinter as tk
-from tkinter.ttk import Combobox
-from tkcalendar import Calendar, DateEntry
 import re
 
-from params.params import ConsoleParams
 from processing.dataframeprocessing import process_dataset
 
 def main() -> None:
