@@ -18,7 +18,7 @@ class GUI(object):
 
     def __init__(self, window):
         self.window = window
-        window.geometry("300x300+10+10")
+        window.geometry("300x500+10+10")
         window.resizable(width=False, height=False)
         window.title('Measurement Database Processing')
 
@@ -101,35 +101,42 @@ class GUI(object):
         entry4.config(state="disabled")
         entry5.config(state="disabled")
 
+        errors = tk.Text(window, height=10, width=32, fg='red', wrap='word')
+        errors.pack()
+        errors.place(x=20, y= 300)
+
         def process():
             errorMessage = ""
             start_date = entry1.get()
             end_date = entry2.get()
             start_hour = entry3.get()
             end_hour = entry4.get()
-            std = int(entry5.get())
+            std = entry5.get()
             datePattern = re.compile("^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$")
             timePattern = re.compile("^(((([0-1][0-9])|(2[0-3])):?[0-5][0-9]:?[0-5][0-9]+$))")
             if self.file == "":
-                errorMessage += "Debe elegir un archivo\n"
+                errorMessage += "* Debe elegir un archivo\n"
             if v1.get() == 1 and (start_date == "" or not datePattern.match(start_date)):
-                errorMessage += "Debe ingresar una fecha de inicio válida\n"
+                errorMessage += "* Debe ingresar una fecha de inicio válida\n"
             if v2.get() == 1 and (end_date == "" or not datePattern.match(end_date)):
-                errorMessage += "Debe ingresar una fecha de fin válida\n"
+                errorMessage += "* Debe ingresar una fecha de fin válida\n"
             if v3.get() == 1 and (start_hour == "" or not timePattern.match(start_hour)):
-                errorMessage += "Debe ingresar una hora de inicio válida\n"
+                errorMessage += "* Debe ingresar una hora de inicio válida\n"
             if v4.get() == 1 and (end_hour == "" or not timePattern.match(end_hour)):
-                errorMessage += "Debe ingresar una hora de fin válida\n"
+                errorMessage += "* Debe ingresar una hora de fin válida\n"
             if v5.get() == 1 and std == "":
-                errorMessage += "Debe ingresar un valor de desviación estandar válido"
+                errorMessage += "* Debe ingresar un valor de desviación estandar válido"
             if errorMessage == "":
                 start_date = None if start_date == "" else start_date
                 end_date = None if end_date == "" else end_date
                 start_hour = None if start_hour == "" else start_hour
                 end_hour = None if end_hour == "" else end_hour
-                process_dataset(self.file, start_hour, end_hour, start_date, end_date, std)
+                if std == "":
+                    std = 3
+                process_dataset(self.file, start_hour, end_hour, start_date, end_date, int(std))
             else:
-                print(errorMessage)
+                errors.delete('1.0', tk.END)
+                errors.insert(tk.END, errorMessage)
 
         submit = tk.Button(text="Submit", command=process)
         submit.place(x=120, y=260)
