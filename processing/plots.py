@@ -1,5 +1,5 @@
 from typing import Callable
-
+from matplotlib import use
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -11,6 +11,7 @@ from processing.constants.plotsConstants import PlotsConstants
 
 import matplotlib.dates as mdates
 
+use('TkAgg')
 
 # Plot each measurement evolution
 def plot_timeseries(df: DataFrame) -> None:
