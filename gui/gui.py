@@ -4,12 +4,13 @@ import tkinter as tk
 
 from processing.dataframeprocessing import process_dataset
 
-class GUI(object):
+class GUI():
     file = ""
 
-    def __init__(self, window):
+    def __init__(self):
+        window = tk.Tk()
         self.window = window
-        window.geometry("300x500+10+10")
+        window.geometry("300x700+10+10")
         window.resizable(width=False, height=False)
         window.title('Measurement Database Processing')
 
@@ -24,26 +25,26 @@ class GUI(object):
         drop.pack()
 
         # Processing label options
-        lbl = tk.Label(window, text="Select processing options", fg='black', font=("Helvetica", 10))
-        lbl.place(x=70, y=50)
+        lbl1 = tk.Label(window, text="Select processing options", fg='black', font=("Helvetica", 10))
+        lbl1.place(x=70, y=50)
+
+        entry1 = tk.Entry(width=12)
+        entry1.place(x=150, y=100)
+        entry2 = tk.Entry(width=12)
+        entry2.place(x=150, y=130)
+        entry3 = tk.Entry(width=12)
+        entry3.place(x=150, y=160)
+        entry4 = tk.Entry(width=12)
+        entry4.place(x=150, y=190)
+        entry5 = tk.Entry(width=12)
+        entry5.place(x=150, y=220)
+        entry5.insert(0, str(3))
 
         v1 = tk.IntVar()
         v2 = tk.IntVar()
         v3 = tk.IntVar()
         v4 = tk.IntVar()
         v5 = tk.IntVar()
-
-        entry1 = tk.Entry(width=8)
-        entry1.place(x=150, y=100)
-        entry2 = tk.Entry(width=8)
-        entry2.place(x=150, y=130)
-        entry3 = tk.Entry(width=8)
-        entry3.place(x=150, y=160)
-        entry4 = tk.Entry(width=8)
-        entry4.place(x=150, y=190)
-        entry5 = tk.Entry(width=8)
-        entry5.place(x=150, y=220)
-        entry5.insert(0, str(3))
 
         def activate_check1():
             if v1.get() == 1:  # whenever checked
@@ -94,7 +95,7 @@ class GUI(object):
 
         errors = tk.Text(window, height=10, width=32, fg='red', wrap='word')
         errors.pack()
-        errors.place(x=20, y= 300)
+        errors.place(x=20, y= 500)
 
         def process():
             errorMessage = ""
@@ -124,10 +125,30 @@ class GUI(object):
                 end_hour = None if end_hour == "" else end_hour
                 if std == "":
                     std = 3
-                process_dataset(self.file, start_hour, end_hour, start_date, end_date, int(std))
+                window.destroy()
+                process_dataset(self.file, start_hour, end_hour, start_date, end_date, int(std), (vp1.get(), vp2.get(), vp3.get(), vp4.get()))
             else:
                 errors.delete('1.0', tk.END)
                 errors.insert(tk.END, errorMessage)
 
+        lbl2 = tk.Label(window, text="Select plots", fg='black', font=("Helvetica", 10))
+        lbl2.place(x=110, y=260)
+
+        vp1 = tk.IntVar()
+        vp2 = tk.IntVar()
+        vp3 = tk.IntVar()
+        vp4 = tk.IntVar()
+
+        p1 = tk.Checkbutton(window, text="Timeseries", variable=vp1)
+        p2 = tk.Checkbutton(window, text="Boxes", variable=vp2)
+        p3 = tk.Checkbutton(window, text="Correlations", variable=vp3)
+        p4 = tk.Checkbutton(window, text="Beyond Standard Deviations", variable=vp4)
+        p1.place(x=50, y=300)
+        p2.place(x=50, y=330)
+        p3.place(x=50, y=360)
+        p4.place(x=50, y=390)
+
         submit = tk.Button(text="Submit", command=process)
-        submit.place(x=120, y=260)
+        submit.place(x=120, y=450)
+
+        window.mainloop()

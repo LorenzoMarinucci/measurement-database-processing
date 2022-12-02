@@ -16,7 +16,8 @@ def process_dataset(
         hour_end: Optional[str],
         day_start: Optional[str],
         day_end: Optional[str],
-        sdv: Optional[int]
+        sdv: Optional[int],
+        plots: tuple[int, int, int, int]
 ) -> None:
     # Load the pandas dataframe
     df = pd.read_csv(
@@ -54,10 +55,14 @@ def process_dataset(
     print(description)
 
     # Plots
-    plot_timeseries(filtered_df)
-    plot_boxes(filtered_df)
-    plot_correlations(filtered_df)
-    plot_beyond_sdvs(filtered_df, sdv)
+    if plots[0] == 1:
+        plot_timeseries(filtered_df)
+    if plots[1] == 1:
+        plot_boxes(filtered_df)
+    if plots[2] == 1:
+        plot_correlations(filtered_df)
+    if plots[3] == 1:
+        plot_beyond_sdvs(filtered_df, sdv)
 
     # Save data
     saveData(filtered_df, description)
